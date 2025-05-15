@@ -2,7 +2,6 @@ const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database('partners.db');
 
 db.serialize(() => {
-    // Таблица Partners
     db.run(`
         CREATE TABLE IF NOT EXISTS Partners (
             partner_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -17,7 +16,6 @@ db.serialize(() => {
         )
     `);
 
-    // Таблица ProductTypes
     db.run(`
         CREATE TABLE IF NOT EXISTS ProductTypes (
             type_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -26,7 +24,6 @@ db.serialize(() => {
         )
     `);
 
-    // Таблица MaterialTypes
     db.run(`
         CREATE TABLE IF NOT EXISTS MaterialTypes (
             material_type_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -35,7 +32,6 @@ db.serialize(() => {
         )
     `);
 
-    // Таблица Products
     db.run(`
         CREATE TABLE IF NOT EXISTS Products (
             product_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -47,7 +43,6 @@ db.serialize(() => {
         )
     `);
 
-    // Таблица Sales
     db.run(`
         CREATE TABLE IF NOT EXISTS Sales (
             sale_id INTEGER PRIMARY KEY AUTOINCREMENT,

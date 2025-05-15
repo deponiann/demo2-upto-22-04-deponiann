@@ -1,6 +1,30 @@
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database('partners.db');
 
+function calculateDiscount(partnerId, callback) {
+    db.get(`
+        SELECT COALESCE(SUM(s.quantity), 0) as total_quantity
+        FROM Sales s
+        WHERE s.partner_id = ?
+    `, [partnerId], (err, row) => {
+        if (err) {
+            console.error('Ошибка расчёта общего количества продаж:', err);
+            callback(0);
+            return;
+        }
+        const totalQuantity = row.total_quantity || 0;
+        let discount = 0;
+        if (totalQuantity >= 300000) {
+            discount = 15;
+        } else if (totalQuantity >= 50000) {
+            discount = 10;
+        } else if (totalQuantity >= 10000) {
+            discount = 5;
+        }
+        callback(discount);
+    });
+}
+
 function loadPartners() {
     db.all(`SELECT * FROM Partners`, (err, rows) => {
         if (err) {
@@ -15,28 +39,31 @@ function loadPartners() {
             return;
         }
         rows.forEach(row => {
-            const partnerBlock = document.createElement('div');
-            partnerBlock.className = 'partner-block';
-            partnerBlock.innerHTML = `
-                <div class="row">
-                    <div class="col-8 partner-info">
-                        <p><strong>Наименование:</strong> ${row.partner_name}</p>
-                        <p><strong>Тип:</strong> ${row.partner_type}</p>
-                        <p><strong>Директор:</strong> ${row.director}</p>
-                        <p><strong>Электронная почта:</strong> ${row.email}</p>
-                        <p><strong>Телефон:</strong> ${row.phone}</p>
-                        <p><strong>Юридический адрес:</strong> ${row.legal_address}</p>
-                        <p><strong>ИНН:</strong> ${row.inn}</p>
-                        <p><strong>Рейтинг:</strong> ${row.rating}</p>
+            calculateDiscount(row.partner_id, (discount) => {
+                const partnerBlock = document.createElement('div');
+                partnerBlock.className = 'partner-block';
+                partnerBlock.innerHTML = `
+                    <div class="row">
+                        <div class="col-8 partner-info">
+                            <p><strong>Наименование:</strong> ${row.partner_name}</p>
+                            <p><strong>Тип:</strong> ${row.partner_type}</p>
+                            <p><strong>Директор:</strong> ${row.director}</p>
+                            <p><strong>Электронная почта:</strong> ${row.email}</p>
+                            <p><strong>Телефон:</strong> ${row.phone}</p>
+                            <p><strong>Юридический адрес:</strong> ${row.legal_address}</p>
+                            <p><strong>ИНН:</strong> ${row.inn}</p>
+                            <p><strong>Рейтинг:</strong> ${row.rating}</p>
+                        </div>
+                        <div class="col-4 text-end">
+                            <button class="btn btn-sm btn-accent me-2" onclick="editPartner(${row.partner_id})">Редактировать</button>
+                            <button class="btn btn-sm btn-accent me-2" onclick="deletePartner(${row.partner_id})">Удалить</button>
+                            <button class="btn btn-sm btn-accent" onclick="viewSales(${row.partner_id}, '${row.partner_name}')">История продаж</button>
+                            <p class="discount-text">Скидка: ${discount}%</p>
+                        </div>
                     </div>
-                    <div class="col-4 text-end">
-                        <button class="btn btn-sm btn-accent me-2" onclick="editPartner(${row.partner_id})">Редактировать</button>
-                        <button class="btn btn-sm btn-accent me-2" onclick="deletePartner(${row.partner_id})">Удалить</button>
-                        <button class="btn btn-sm btn-accent" onclick="viewSales(${row.partner_id}, '${row.partner_name}')">История продаж</button>
-                    </div>
-                </div>
-            `;
-            partnersList.appendChild(partnerBlock);
+                `;
+                partnersList.appendChild(partnerBlock);
+            });
         });
     });
 }

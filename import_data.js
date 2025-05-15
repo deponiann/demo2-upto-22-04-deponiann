@@ -51,7 +51,6 @@ const sales = [
     { product_name: 'Инженерная доска Дуб Французская елка однополосная 12 мм', partner_name: 'МонтажПро', quantity: 25000, sale_date: '2024-06-12' }
 ];
 
-// Функции для выполнения запросов с использованием Promise
 const runQuery = (query, params = []) => {
     return new Promise((resolve, reject) => {
         db.run(query, params, function (err) {
@@ -79,7 +78,6 @@ const getQuery = (query, params = []) => {
 // Асинхронная функция для импорта данных
 async function importData() {
     try {
-        // Импорт Partners
         for (const partner of partners) {
             await runQuery(
                 `INSERT OR IGNORE INTO Partners (partner_type, partner_name, director, email, phone, legal_address, inn, rating) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
@@ -88,7 +86,6 @@ async function importData() {
         }
         console.log('Partners импортированы');
 
-        // Импорт ProductTypes
         for (const type of productTypes) {
             await runQuery(
                 `INSERT OR IGNORE INTO ProductTypes (type_name, type_coefficient) VALUES (?, ?)`,
@@ -97,7 +94,6 @@ async function importData() {
         }
         console.log('ProductTypes импортированы');
 
-        // Импорт MaterialTypes
         for (const material of materialTypes) {
             await runQuery(
                 `INSERT OR IGNORE INTO MaterialTypes (material_type_name, defect_percentage) VALUES (?, ?)`,
@@ -106,7 +102,6 @@ async function importData() {
         }
         console.log('MaterialTypes импортированы');
 
-        // Импорт Products
         for (const product of products) {
             const type = await getQuery(
                 `SELECT type_id FROM ProductTypes WHERE type_name = ?`,
@@ -123,7 +118,6 @@ async function importData() {
         }
         console.log('Products импортированы');
 
-        // Импорт Sales
         for (const sale of sales) {
             const partner = await getQuery(
                 `SELECT partner_id FROM Partners WHERE partner_name = ?`,
@@ -144,7 +138,6 @@ async function importData() {
         }
         console.log('Sales импортированы');
 
-        // Закрытие базы данных
         db.close((err) => {
             if (err) {
                 console.error('Ошибка при закрытии базы данных:', err);
@@ -158,5 +151,4 @@ async function importData() {
     }
 }
 
-// Запуск импорта
 importData();
