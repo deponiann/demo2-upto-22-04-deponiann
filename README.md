@@ -12,18 +12,19 @@ https://github.com/sseezov/demo-docs/blob/main/%D0%A1%D0%BE%D0%BA%D1%80%D0%B0%D1
 
 ## Установка и запуск
 1. Клонирование репозитория.
+```bash
+git clone git@github.com:deponiann/demo2-upto-22-04-deponiann.git
+```
 2. Установка зависимостей:
 ```bash
 npm install
 ```
-3. Подготовка ресурсов:
-Нужны logo.png и icon.png в src/ для иконки и логотипа.
-4. Создание базы данных и импорт данных:
+3. Создание базы данных и импорт данных:
 ```bash
 node init_db.js
 node import_data.js
 ```
-5. Запуск приложения
+4. Запуск приложения
 ```bash
 npm start
 ```
