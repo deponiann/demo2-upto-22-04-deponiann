@@ -1,0 +1,20 @@
+{
+  "name": "re-demo-upto-19-04-deponiann",
+  "version": "1.0.0",
+  "description": "[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/d6QHBXjq) Оценка выполненного задания будет производиться по шкале: Максимально возможное количество баллов - 50 Неудовлетворительно (2) — менее 10 баллов Удовлетворительно (3) — от 10 до 19 баллов Хорошо (4) — от 20 до 34 баллов Отлично (5) — от 35 до 50 баллов",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^35.1.5"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.5",
+    "sqlite3": "^5.1.7"
+  }
+}
